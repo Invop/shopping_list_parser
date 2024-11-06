@@ -1,0 +1,13 @@
+
+index         = { ASCII_DIGIT+ }
+quantity      = { ASCII_DIGIT+ }
+name          = { ASCII_ALPHA+ }
+unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" }
+
+WHITESPACE    = _{ " " | "\t" }
+
+item          = { index ~ "." ~ WHITESPACE? ~ name ~ WHITESPACE? ~ quantity ~ WHITESPACE? ~ unit }
+
+shopping_list = { SOI ~ (item ~ NEWLINE?)* ~ EOI }
+
+NEWLINE      = _{ "\r\n" | "\n" }
