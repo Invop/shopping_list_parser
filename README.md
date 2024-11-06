@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is a **shopping-list parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
+This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
 
 ## Example Usage
 
