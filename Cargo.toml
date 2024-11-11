@@ -1,6 +1,6 @@
 [package]
 name = "shopping_list_parser"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Shopping-list parser for edu purposes"
 license = "MIT"
