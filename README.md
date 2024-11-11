@@ -42,5 +42,3 @@ An example of a shopping list that can be parsed by this grammar:
    let input = "1. Apples 5 pcs\n2. Bananas 3 kg\n3. Mango 1 pcs";
    parse_shopping_list(&input)?;
    ```
-
-   The function will parse the input and return a `Result` containing any parsing errors.
