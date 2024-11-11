@@ -5,12 +5,31 @@ use pest_derive::Parser;
 #[derive(Parser)]
 #[grammar = "grammar.pest"]
 pub struct Grammar;
+
+/// Represents an item in the shopping list.
 pub struct ShoppingItem {
     pub index: usize,
     pub name: String,
     pub quantity: u32,
     pub unit: String,
 }
+
+/// Parses a shopping list from a given string input.
+///
+/// # Arguments
+///
+/// * `input` - The input string containing the shopping list to be parsed.
+///
+/// # Returns
+///
+/// * `Ok(Vec<ShoppingItem>)` - A vector of `ShoppingItem` if parsing is successful.
+/// * `Err(anyhow::Error)` - An error if the input is empty or parsing fails.
+///
+/// # Errors
+///
+/// This function will return an error if:
+/// - The input is empty.
+/// - The input cannot be parsed according to the shopping list grammar.
 pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingItem>> {
     if input.trim().is_empty() {
         return Err(anyhow!("input is empty"));
@@ -29,7 +48,17 @@ pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingItem>> {
     }
     Ok(items)
 }
-
+/// Parses an individual item from a given `pest::iterators::Pair`.
+///
+/// # Arguments
+///
+/// * `inner_pair` - A `pest::iterators::Pair` representing an item in the shopping list.
+///
+/// # Returns
+///
+/// * `Ok(ShoppingItem)` - A `ShoppingItem` if parsing is successful.
+/// * `Err(anyhow::Error)` - An error if parsing fails.
+///
 fn parse_item(inner_pair: pest::iterators::Pair<Rule>) -> anyhow::Result<ShoppingItem> {
     let mut item = ShoppingItem {
         index: 0,
