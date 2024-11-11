@@ -1,6 +1,6 @@
 ﻿# Shopping List Parser
-https://crates.io/crates/shopping_list_parser
-https://docs.rs/shopping_list_parser/latest/shopping_list_parser/
+### https://crates.io/crates/shopping_list_parser 
+### https://docs.rs/shopping_list_parser/latest/shopping_list_parser/
 ## Description
 
 This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
