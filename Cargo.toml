@@ -7,5 +7,6 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0.93"
+clap = { version = "4.5.20", features = ["derive"] }
 pest = "2.7.14"
 pest_derive = "2.7.14"
