@@ -4,7 +4,21 @@
 ## Description
 
 This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
-
+## Grammar rules
+```
+   index         = { ASCII_DIGIT+ }
+   quantity      = { ASCII_DIGIT+ }
+   name          = { ASCII_ALPHA+ }
+   unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" }
+   
+   WHITESPACE    = _{ " " | "\t" }
+   
+   item          = { index ~ "." ~ WHITESPACE? ~ name ~ WHITESPACE? ~ quantity ~ WHITESPACE? ~ unit }
+   
+   shopping_list = { SOI ~ (item ~ NEWLINE?)* ~ EOI }
+   
+   NEWLINE      = _{ "\r\n" | "\n" }
+```
 ## Example Usage
 
 An example of a shopping list that can be parsed by this grammar:
