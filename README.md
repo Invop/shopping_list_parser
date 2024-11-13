@@ -6,18 +6,15 @@
 This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
 ## Grammar rules
 ```
-   index         = { ASCII_DIGIT+ }
-   quantity      = { ASCII_DIGIT+ }
-   name          = { ASCII_ALPHA+ }
-   unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" }
-   
-   WHITESPACE    = _{ " " | "\t" }
-   
-   item          = { index ~ "." ~ WHITESPACE? ~ name ~ WHITESPACE? ~ quantity ~ WHITESPACE? ~ unit }
-   
-   shopping_list = { SOI ~ (item ~ NEWLINE?)* ~ EOI }
-   
-   NEWLINE      = _{ "\r\n" | "\n" }
+index         = { ASCII_DIGIT+ }
+quantity      = { ASCII_DIGIT+ }
+name          = { (ASCII_ALPHA | " " | "-")+ }
+brand         = { "(" ~ (ASCII_ALPHA | " ")+ ~ ")" }
+description   = { "{" ~ (ASCII_ALPHA | ASCII_DIGIT | " ")+ ~ "}" }
+unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" | "oz" }
+category      = { "[" ~ ASCII_ALPHA+ ~ ASCII_DIGIT* ~ "]" }
+item          = { index ~ "." ~ WHITE_SPACE? ~ name ~ WHITE_SPACE? ~ quantity ~ WHITE_SPACE? ~ unit ~ (WHITE_SPACE? ~ brand)? ~ (WHITE_SPACE? ~ description)? }
+shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWLINE?)* ~ EOI) }
 ```
 ## Example Usage
 
