@@ -16,10 +16,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    #[command(about = "Parse a shopping list from a file")]
     Parse {
-        #[arg(short, long, value_name = "FILE")]
+        #[arg(short, long, value_name = "FILE", help = "Path to the shopping list file to be parsed")]
         file: PathBuf,
-        #[arg(short, long)]
+        #[arg(short, long, help = "Enable verbose mode for detailed output")]
         verbose: bool,
     },
     Credits,
@@ -44,7 +45,6 @@ fn show_credits() {
     println!("Created by: Andrii Shandryk");
     println!("License: MIT");
 }
-
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
