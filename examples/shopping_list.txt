@@ -1,3 +1,20 @@
-1. apple 2 kg
-2. orange 3 pcs
-3. milk 1 ltr
+1. Apple 4 pcs (Organic) {Nice and fresh}
+2. Banana 6 pcs (Dole)
+3. Carrot 1 kg {Locally grown}
+4. Detergent 2 ltr
+
+[Fruits]
+5. Mango 3 pcs {Sweet and juicy}
+6. Strawberry 1 pcs [Berry] {Freshly picked}
+
+[Vegetables]
+7. Lettuce 2 pcs
+8. Spinach 1 kg {Rich in iron} (Fresh Farms)
+
+[Household]
+9. Soap 10 pcs
+10. Shampoo 2 ltr {Anti-dandruff}
+
+[Miscellaneous]
+11. Toothpaste 3 pcs (Colgate) {Mint flavor}
+12. Paper Towels 5 pcs (Bounty)
