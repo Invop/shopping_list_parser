@@ -6,7 +6,8 @@ run:
 
 example:
 	cargo run -- parse -f examples/shopping_list.txt --verbose
-
+runhelp:
+	cargo run -- --help
 test:
 	cargo test
 
