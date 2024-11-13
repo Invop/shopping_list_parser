@@ -21,7 +21,6 @@ pub struct ShoppingCategory {
     pub items: Vec<ShoppingItem>,
 }
 
-
 /// Parses a shopping list from a given string input.
 ///
 /// # Arguments

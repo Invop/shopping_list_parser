@@ -7,12 +7,14 @@ mod tests {
     #[test]
     fn test_index() -> anyhow::Result<()> {
         // Valid cases
-        let pair = Grammar::parse(Rule::index, "123")?.next().ok_or_else(|| anyhow!("no pair"))?;
+        let pair = Grammar::parse(Rule::index, "123")?
+            .next()
+            .ok_or_else(|| anyhow!("no pair"))?;
         assert_eq!(pair.as_str(), "123");
 
         // Test invalid index
-        assert!(Grammar::parse(Rule::index, "abc").is_err());  // Only digits allowed
-        assert!(Grammar::parse(Rule::index, "").is_err());     // Empty not allowed
+        assert!(Grammar::parse(Rule::index, "abc").is_err()); // Only digits allowed
+        assert!(Grammar::parse(Rule::index, "").is_err()); // Empty not allowed
 
         Ok(())
     }
@@ -20,71 +22,69 @@ mod tests {
     #[test]
     fn test_quantity() -> anyhow::Result<()> {
         // Valid cases
-        let pair = Grammar::parse(Rule::quantity, "500")?.next().ok_or_else(|| anyhow!("no pair"))?;
+        let pair = Grammar::parse(Rule::quantity, "500")?
+            .next()
+            .ok_or_else(|| anyhow!("no pair"))?;
         assert_eq!(pair.as_str(), "500");
 
         // Test invalid quantity
-        assert!(Grammar::parse(Rule::quantity, "abc").is_err());  // Only digits allowed
-        assert!(Grammar::parse(Rule::quantity, "").is_err());     // Empty not allowed
+        assert!(Grammar::parse(Rule::quantity, "abc").is_err()); // Only digits allowed
+        assert!(Grammar::parse(Rule::quantity, "").is_err()); // Empty not allowed
 
         Ok(())
     }
 
     #[test]
     fn test_name() -> anyhow::Result<()> {
-        let valid_names = vec![
-            "Milk",
-            "Fresh Milk",
-            "Ultra-Fresh Milk",
-        ];
+        let valid_names = vec!["Milk", "Fresh Milk", "Ultra-Fresh Milk"];
 
         for name in valid_names {
-            let pair = Grammar::parse(Rule::name, name)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::name, name)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), name);
         }
 
         // Test invalid names
-        assert!(Grammar::parse(Rule::name, "").is_err());         // Empty not allowed
-        assert!(Grammar::parse(Rule::name, "123").is_err());      // Only alpha, space, and hyphen allowed
+        assert!(Grammar::parse(Rule::name, "").is_err()); // Empty not allowed
+        assert!(Grammar::parse(Rule::name, "123").is_err()); // Only alpha, space, and hyphen allowed
 
         Ok(())
     }
 
     #[test]
     fn test_brand() -> anyhow::Result<()> {
-        let valid_brands = vec![
-            "(Nestle)",
-            "(Coca Cola)",
-        ];
+        let valid_brands = vec!["(Nestle)", "(Coca Cola)"];
 
         for brand in valid_brands {
-            let pair = Grammar::parse(Rule::brand, brand)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::brand, brand)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), brand);
         }
 
         // Test invalid brands
-        assert!(Grammar::parse(Rule::brand, "Nestle").is_err());      // Missing parentheses
-        assert!(Grammar::parse(Rule::brand, "(123)").is_err());       // Numbers not allowed
-        assert!(Grammar::parse(Rule::brand, "()").is_err());          // Empty not allowed
+        assert!(Grammar::parse(Rule::brand, "Nestle").is_err()); // Missing parentheses
+        assert!(Grammar::parse(Rule::brand, "(123)").is_err()); // Numbers not allowed
+        assert!(Grammar::parse(Rule::brand, "()").is_err()); // Empty not allowed
 
         Ok(())
     }
 
     #[test]
     fn test_description() -> anyhow::Result<()> {
-        let valid_descriptions = vec![
-            "{Fresh and cold}",
-            "{2 percent fat}",
-        ];
+        let valid_descriptions = vec!["{Fresh and cold}", "{2 percent fat}"];
 
         for desc in valid_descriptions {
-            let pair = Grammar::parse(Rule::description, desc)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::description, desc)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), desc);
         }
 
         // Test invalid descriptions
-        assert!(Grammar::parse(Rule::description, "no braces").is_err());  // Missing braces
-        assert!(Grammar::parse(Rule::description, "{}").is_err());         // Empty not allowed
+        assert!(Grammar::parse(Rule::description, "no braces").is_err()); // Missing braces
+        assert!(Grammar::parse(Rule::description, "{}").is_err()); // Empty not allowed
 
         Ok(())
     }
@@ -94,13 +94,15 @@ mod tests {
         let valid_units = vec!["kg", "g", "ltr", "ml", "pcs", "oz"];
 
         for unit in valid_units {
-            let pair = Grammar::parse(Rule::unit, unit)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::unit, unit)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), unit);
         }
 
         // Test invalid units
-        assert!(Grammar::parse(Rule::unit, "pound").is_err());  // Not in allowed units
-        assert!(Grammar::parse(Rule::unit, "").is_err());       // Empty not allowed
+        assert!(Grammar::parse(Rule::unit, "pound").is_err()); // Not in allowed units
+        assert!(Grammar::parse(Rule::unit, "").is_err()); // Empty not allowed
 
         Ok(())
     }
@@ -117,14 +119,16 @@ mod tests {
         ];
 
         for category in valid_categories {
-            let pair = Grammar::parse(Rule::category, category)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::category, category)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), category);
         }
 
         // Test invalid categories
-        assert!(Grammar::parse(Rule::category, "DAIRY").is_err());       // Missing brackets
-        assert!(Grammar::parse(Rule::category, "[]").is_err());          // Empty not allowed
-        assert!(Grammar::parse(Rule::category, "[DAIRY-1]").is_err());   // Hyphen not allowed
+        assert!(Grammar::parse(Rule::category, "DAIRY").is_err()); // Missing brackets
+        assert!(Grammar::parse(Rule::category, "[]").is_err()); // Empty not allowed
+        assert!(Grammar::parse(Rule::category, "[DAIRY-1]").is_err()); // Hyphen not allowed
 
         Ok(())
     }
@@ -142,14 +146,16 @@ mod tests {
         ];
 
         for item in valid_items {
-            let pair = Grammar::parse(Rule::item, item)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::item, item)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), item);
         }
 
         // Test invalid items
-        assert!(Grammar::parse(Rule::item, "Milk 1 ltr").is_err());     // Missing index
-        assert!(Grammar::parse(Rule::item, "1.").is_err());             // Missing name, quantity, unit
-        assert!(Grammar::parse(Rule::item, "1. Milk").is_err());        // Missing quantity and unit
+        assert!(Grammar::parse(Rule::item, "Milk 1 ltr").is_err()); // Missing index
+        assert!(Grammar::parse(Rule::item, "1.").is_err()); // Missing name, quantity, unit
+        assert!(Grammar::parse(Rule::item, "1. Milk").is_err()); // Missing quantity and unit
 
         Ok(())
     }
@@ -173,17 +179,17 @@ mod tests {
         ];
 
         for list in valid_lists {
-            let pair = Grammar::parse(Rule::shopping_list, list)?.next().ok_or_else(|| anyhow!("no pair"))?;
+            let pair = Grammar::parse(Rule::shopping_list, list)?
+                .next()
+                .ok_or_else(|| anyhow!("no pair"))?;
             assert_eq!(pair.as_str(), list);
         }
 
         // Test invalid lists
-        assert!(Grammar::parse(Rule::shopping_list, "Invalid List").is_err());  // Invalid format
-        assert!(Grammar::parse(Rule::shopping_list, "Milk 1 ltr").is_err());   // Missing index
-        assert!(Grammar::parse(Rule::shopping_list, "[INVALID@]").is_err());   // Invalid category format
+        assert!(Grammar::parse(Rule::shopping_list, "Invalid List").is_err()); // Invalid format
+        assert!(Grammar::parse(Rule::shopping_list, "Milk 1 ltr").is_err()); // Missing index
+        assert!(Grammar::parse(Rule::shopping_list, "[INVALID@]").is_err()); // Invalid category format
 
         Ok(())
     }
-
-
 }
