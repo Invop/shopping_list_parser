@@ -1,9 +1,24 @@
 ﻿# Shopping List Parser
-
+### https://crates.io/crates/shopping_list_parser 
+### https://docs.rs/shopping_list_parser/latest/shopping_list_parser/
 ## Description
 
 This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
-
+## Grammar rules
+```
+   index         = { ASCII_DIGIT+ }
+   quantity      = { ASCII_DIGIT+ }
+   name          = { ASCII_ALPHA+ }
+   unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" }
+   
+   WHITESPACE    = _{ " " | "\t" }
+   
+   item          = { index ~ "." ~ WHITESPACE? ~ name ~ WHITESPACE? ~ quantity ~ WHITESPACE? ~ unit }
+   
+   shopping_list = { SOI ~ (item ~ NEWLINE?)* ~ EOI }
+   
+   NEWLINE      = _{ "\r\n" | "\n" }
+```
 ## Example Usage
 
 An example of a shopping list that can be parsed by this grammar:
@@ -41,5 +56,3 @@ An example of a shopping list that can be parsed by this grammar:
    let input = "1. Apples 5 pcs\n2. Bananas 3 kg\n3. Mango 1 pcs";
    parse_shopping_list(&input)?;
    ```
-
-   The function will parse the input and return a `Result` containing any parsing errors.
