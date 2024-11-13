@@ -5,15 +5,15 @@
 
 [Fruits]
 5. Mango 3 pcs {Sweet and juicy}
-6. Strawberry 1 pcs [Berry] {Freshly picked}
+6. Strawberry 1 pcs {Freshly picked}
 
 [Vegetables]
 7. Lettuce 2 pcs
-8. Spinach 1 kg {Rich in iron} (Fresh Farms)
+8. Spinach 1 kg (Fresh Farms) {Rich in iron}
 
 [Household]
 9. Soap 10 pcs
-10. Shampoo 2 ltr {Anti-dandruff}
+10. Shampoo 2 ltr
 
 [Miscellaneous]
 11. Toothpaste 3 pcs (Colgate) {Mint flavor}
