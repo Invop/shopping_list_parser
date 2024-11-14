@@ -10,39 +10,30 @@ The following grammar defines the structure of each item in the shopping list, w
 
 Grammar Rules<br>
 index: Numeric identifier for each item<br>.
-<br>
 index = { ASCII_DIGIT+ }<br>
-Example: 1, 25<br>
+Example: 1, 25<br><br>
 quantity: The amount or count of the item.<br>
-<br>
 quantity = { ASCII_DIGIT+ }<br>
-Example: 2, 5<br>
+Example: 2, 5<br><br>
 name: Name of the item, allowing letters, spaces, and hyphens.<br>
-<br>
 name = { (ASCII_ALPHA | " " | "-")+ }<br>
-Example: Apples, Brown Rice<br>
+Example: Apples, Brown Rice<br><br>
 brand: Optional brand information, placed in parentheses.<br>
-<br>
 brand = { "(" ~ (ASCII_ALPHA | " ")+ ~ ")" }<br>
-Example: (Green Organic), (Local Brand)<br>
+Example: (Green Organic), (Local Brand)<br><br>
 description: Optional additional details, placed in curly braces.<br>
-<br>
 description = { "{" ~ (ASCII_ALPHA | ASCII_DIGIT | " ")+ ~ "}" }<br>
-Example: {Sweet and crunchy}, {High in fiber}<br>
+Example: {Sweet and crunchy}, {High in fiber}<br><br>
 unit: Measurement unit for the quantity.<br>
-<br>
 unit = { "kg" | "g" | "ltr" | "ml" | "pcs" | "oz" }<br>
-Example: kg, pcs, oz<br>
+Example: kg, pcs, oz<br><br>
 category: A label for organizing items, placed in square brackets.<br>
-<br>
 category = { "[" ~ ASCII_ALPHA+ ~ ASCII_DIGIT* ~ "]" }<br>
-Example: [Fruits], [Snacks1]<br>
+Example: [Fruits], [Snacks1]<br><br>
 item: Full definition of an item entry, including mandatory and optional elements.<br>
-<br>
 item = { index ~ "." ~ WHITE_SPACE? ~ name ~ WHITE_SPACE? ~ quantity ~ WHITE_SPACE? ~ unit ~ (WHITE_SPACE? ~ brand)? ~ (WHITE_SPACE? ~ description)? }<br>
-Example: 1. Apples 2 kg (Green Organic) {Sweet and crunchy}<br>
+Example: 1. Apples 2 kg (Green Organic) {Sweet and crunchy}<br><br>
 shopping_list: A collection of items and categories, with support for whitespace and line breaks.<br>
-
 shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWLINE?)* ~ EOI) }<br>
 ```
    1. Apples 2 kg (Green Organic) {Sweet and crunchy}
@@ -52,6 +43,7 @@ shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWL
    4. Oranges 3 kg
    5. Bananas 1 kg
 ```
+<br>
 ## Features
 
 - Parses a structured shopping list with items, quantities, and units
