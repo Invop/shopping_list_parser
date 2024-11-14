@@ -52,16 +52,6 @@ shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWL
    4. Oranges 3 kg
    5. Bananas 1 kg
 ```
-## Example Usage
-
-An example of a shopping list that can be parsed by this grammar:
-
-```
-1. Apples 5 pcs
-2. Bananas 3 kg
-3. Mango 1 pcs
-```
-
 ## Features
 
 - Parses a structured shopping list with items, quantities, and units
