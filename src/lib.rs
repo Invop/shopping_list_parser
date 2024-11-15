@@ -5,8 +5,6 @@ use pest_derive::Parser;
 #[derive(Parser)]
 #[grammar = "grammar.pest"]
 pub struct Grammar;
-#[derive(Debug, )]
-pub struct ParseErr();
 /// Represents an item in the shopping list.
 pub struct ShoppingItem {
     pub index: usize,
