@@ -36,6 +36,7 @@ Example: 1. Apples 2 kg (Green Organic) {Sweet and crunchy}<br><br>
 shopping_list: A collection of items and categories, with support for whitespace and line breaks.<br>
 shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWLINE?)* ~ EOI) }<br>
 ```
+   [SMTH]
    1. Apples 2 kg (Green Organic) {Sweet and crunchy}
    2. Milk 1 ltr (Dairy Best)
    3. Bread 1 pcs {Whole grain, freshly baked}
