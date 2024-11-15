@@ -5,27 +5,45 @@
 
 This project is a **shopping_list_parser** designed for educational purposes. It allows you to parse a structured list of shopping items using a grammar defined in [pest](https://pest.rs/).
 ## Grammar rules
-```
-index         = { ASCII_DIGIT+ }
-quantity      = { ASCII_DIGIT+ }
-name          = { (ASCII_ALPHA | " " | "-")+ }
-brand         = { "(" ~ (ASCII_ALPHA | " ")+ ~ ")" }
-description   = { "{" ~ (ASCII_ALPHA | ASCII_DIGIT | " ")+ ~ "}" }
-unit          = { "kg" | "g" | "ltr" | "ml" | "pcs" | "oz" }
-category      = { "[" ~ ASCII_ALPHA+ ~ ASCII_DIGIT* ~ "]" }
-item          = { index ~ "." ~ WHITE_SPACE? ~ name ~ WHITE_SPACE? ~ quantity ~ WHITE_SPACE? ~ unit ~ (WHITE_SPACE? ~ brand)? ~ (WHITE_SPACE? ~ description)? }
-shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWLINE?)* ~ EOI) }
-```
-## Example Usage
+Shopping List Grammar
+The following grammar defines the structure of each item in the shopping list, with rules for attributes like item names, quantities, units, and optional descriptions. This structure is used to parse and validate items, ensuring consistent formatting.
 
-An example of a shopping list that can be parsed by this grammar:
-
+Grammar Rules<br>
+index: Numeric identifier for each item<br>.
+index = { ASCII_DIGIT+ }<br>
+Example: 1, 25<br><br>
+quantity: The amount or count of the item.<br>
+quantity = { ASCII_DIGIT+ }<br>
+Example: 2, 5<br><br>
+name: Name of the item, allowing letters, spaces, and hyphens.<br>
+name = { (ASCII_ALPHA | " " | "-")+ }<br>
+Example: Apples, Brown Rice<br><br>
+brand: Optional brand information, placed in parentheses.<br>
+brand = { "(" ~ (ASCII_ALPHA | " ")+ ~ ")" }<br>
+Example: (Green Organic), (Local Brand)<br><br>
+description: Optional additional details, placed in curly braces.<br>
+description = { "{" ~ (ASCII_ALPHA | ASCII_DIGIT | " ")+ ~ "}" }<br>
+Example: {Sweet and crunchy}, {High in fiber}<br><br>
+unit: Measurement unit for the quantity.<br>
+unit = { "kg" | "g" | "ltr" | "ml" | "pcs" | "oz" }<br>
+Example: kg, pcs, oz<br><br>
+category: A label for organizing items, placed in square brackets.<br>
+category = { "[" ~ ASCII_ALPHA+ ~ ASCII_DIGIT* ~ "]" }<br>
+Example: [Fruits], [Snacks1]<br><br>
+item: Full definition of an item entry, including mandatory and optional elements.<br>
+item = { index ~ "." ~ WHITE_SPACE? ~ name ~ WHITE_SPACE? ~ quantity ~ WHITE_SPACE? ~ unit ~ (WHITE_SPACE? ~ brand)? ~ (WHITE_SPACE? ~ description)? }<br>
+Example: 1. Apples 2 kg (Green Organic) {Sweet and crunchy}<br><br>
+shopping_list: A collection of items and categories, with support for whitespace and line breaks.<br>
+shopping_list = { SOI ~ ((WHITE_SPACE* ~ (category | item) ~ WHITE_SPACE* ~ NEWLINE?)* ~ EOI) }<br>
 ```
-1. Apples 5 pcs
-2. Bananas 3 kg
-3. Mango 1 pcs
+   1. Apples 2 kg (Green Organic) {Sweet and crunchy}
+   2. Milk 1 ltr (Dairy Best)
+   3. Bread 1 pcs {Whole grain, freshly baked}
+   [Fruits]
+   4. Oranges 3 kg
+   5. Bananas 1 kg
 ```
-
+<br>
 ## Features
 
 - Parses a structured shopping list with items, quantities, and units
