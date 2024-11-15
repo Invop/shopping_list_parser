@@ -5,7 +5,8 @@ use pest_derive::Parser;
 #[derive(Parser)]
 #[grammar = "grammar.pest"]
 pub struct Grammar;
-
+#[derive(Debug, )]
+pub struct ParseErr();
 /// Represents an item in the shopping list.
 pub struct ShoppingItem {
     pub index: usize,
@@ -46,7 +47,9 @@ pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingCategory>>
     let mut current_category = None;
     let mut items = Vec::new();
 
-    let pairs = Grammar::parse(Rule::shopping_list, input)?;
+    let pairs = Grammar::parse(Rule::shopping_list, input).map_err(|e| {
+        anyhow!("Failed to parse shopping list: {}", e)
+    })?;
     for pair in pairs {
         if pair.as_rule() == Rule::shopping_list {
             for inner_pair in pair.into_inner() {
