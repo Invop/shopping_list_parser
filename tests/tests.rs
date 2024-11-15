@@ -192,4 +192,87 @@ mod tests {
 
         Ok(())
     }
+
+    #[test]
+    fn test_parse_item_with_brand_and_description() -> anyhow::Result<()> {
+        let input = "[list] 1. Apple 4 pcs (Organic) {Nice and fresh}";
+        let result = parse_shopping_list(input)?;
+        assert_eq!(result.len(), 1);
+        let category = &result[0];
+        assert_eq!(category.items.len(), 1);
+        let item = &category.items[0];
+        assert_eq!(item.index, 1);
+        assert_eq!(item.name.trim(), "Apple");
+        assert_eq!(item.quantity, 4);
+        assert_eq!(item.unit, "pcs");
+        assert_eq!(item.brand, Some("(Organic)".to_string()));
+        assert_eq!(item.description, Some("{Nice and fresh}".to_string()));
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_multiple_items_in_category() -> anyhow::Result<()> {
+        let input = r#"
+        [Produce]
+        1. Apple 4 pcs (Organic) {Nice and fresh}
+        2. Banana 6 pcs (Dole)
+        3. Carrot 1 kg {Locally grown}
+        "#;
+        let result = parse_shopping_list(input)?;
+        assert_eq!(result.len(), 1);
+        let category = &result[0];
+        assert_eq!(category.name, "[Produce]");
+        assert_eq!(category.items.len(), 3);
+
+        let apple = &category.items[0];
+        assert_eq!(apple.index, 1);
+        assert_eq!(apple.name.trim(), "Apple");
+        assert_eq!(apple.quantity, 4);
+        assert_eq!(apple.unit, "pcs");
+        assert_eq!(apple.brand, Some("(Organic)".to_string()));
+        assert_eq!(apple.description, Some("{Nice and fresh}".to_string()));
+
+        let banana = &category.items[1];
+        assert_eq!(banana.index, 2);
+        assert_eq!(banana.name.trim(), "Banana");
+        assert_eq!(banana.quantity, 6);
+        assert_eq!(banana.unit, "pcs");
+        assert_eq!(banana.brand, Some("(Dole)".to_string()));
+        assert_eq!(banana.description, None);
+
+        let carrot = &category.items[2];
+        assert_eq!(carrot.index, 3);
+        assert_eq!(carrot.name.trim(), "Carrot");
+        assert_eq!(carrot.quantity, 1);
+        assert_eq!(carrot.unit, "kg");
+        assert_eq!(carrot.brand, None);
+        assert_eq!(carrot.description, Some("{Locally grown}".to_string()));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_parse_multiple_categories() -> anyhow::Result<()> {
+        let input = r#"
+        [Produce]
+        1. Apple 4 pcs (Organic) {Nice and fresh}
+        2. Banana 6 pcs (Dole)
+
+        [Household]
+        3. Soap 10 pcs
+        4. Shampoo 2 ltr
+        "#;
+        let result = parse_shopping_list(input)?;
+        assert_eq!(result.len(), 2);
+
+        let produce_category = &result[0];
+        assert_eq!(produce_category.name, "[Produce]");
+        assert_eq!(produce_category.items.len(), 2);
+
+        let household_category = &result[1];
+        assert_eq!(household_category.name, "[Household]");
+        assert_eq!(household_category.items.len(), 2);
+
+        Ok(())
+    }
 }
