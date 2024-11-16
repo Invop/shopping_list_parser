@@ -1,4 +1,3 @@
-use anyhow::anyhow;
 use pest::Parser;
 use pest_derive::Parser;
 use thiserror::Error;
@@ -31,9 +30,6 @@ pub enum ParseError {
     /// Error indicating parsing failure with additional context.
     #[error("Failed to parse shopping list: {0}")]
     ParsingFailed(String),
-    /// Error indicating that parsing of an item failed.
-    #[error("Failed to parse item: {0}")]
-    ItemParsingFailed(String),
 }
 
 /// Parses a shopping list from a given string input.
@@ -59,7 +55,6 @@ pub fn parse_shopping_list(input: &str) -> Result<Vec<ShoppingCategory>, ParseEr
 
     let mut categories = Vec::new();
     let mut current_category = None;
-    let mut items = Vec::new();
 
     let pairs = Grammar::parse(Rule::shopping_list, input)
         .map_err(|e| ParseError::ParsingFailed(e.to_string()))?;
@@ -79,11 +74,9 @@ pub fn parse_shopping_list(input: &str) -> Result<Vec<ShoppingCategory>, ParseEr
                     }
                     Rule::item => {
                         let item = parse_item(inner_pair)
-                            .map_err(|e| ParseError::ItemParsingFailed(e.to_string()))?;
+                            .map_err(|e| ParseError::ParsingFailed(e.to_string()))?;
                         if let Some(ref mut category) = current_category {
                             category.items.push(item);
-                        } else {
-                            items.push(item);
                         }
                     }
                     _ => {}
@@ -108,7 +101,6 @@ pub fn parse_shopping_list(input: &str) -> Result<Vec<ShoppingCategory>, ParseEr
 /// # Returns
 ///
 /// * `Ok(ShoppingItem)` - A `ShoppingItem` if parsing is successful.
-/// * `Err(anyhow::Error)` - An error if parsing fails.
 fn parse_item(inner_pair: pest::iterators::Pair<Rule>) -> anyhow::Result<ShoppingItem> {
     let mut item = ShoppingItem {
         index: 0,
@@ -121,15 +113,9 @@ fn parse_item(inner_pair: pest::iterators::Pair<Rule>) -> anyhow::Result<Shoppin
 
     for element in inner_pair.into_inner() {
         match element.as_rule() {
-            Rule::index => item.index = element.as_str().parse().map_err(|e| anyhow!("{e}"))?,
+            Rule::index => item.index = element.as_str().parse()?,
             Rule::name => item.name = element.as_str().to_string(),
-            Rule::quantity => {
-                item.quantity = element
-                    .as_str()
-                    .trim()
-                    .parse()
-                    .map_err(|e| anyhow!("{e}"))?
-            }
+            Rule::quantity => item.quantity = element.as_str().trim().parse()?,
             Rule::unit => item.unit = element.as_str().to_string(),
             Rule::brand => item.brand = Some(element.as_str().to_string()),
             Rule::description => item.description = Some(element.as_str().to_string()),
