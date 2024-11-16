@@ -275,4 +275,31 @@ mod tests {
 
         Ok(())
     }
+
+    #[test]
+    fn test_parse_empty_input() {
+        let result = parse_shopping_list("");
+        assert!(matches!(result, Err(ParseError::EmptyInput)));
+    }
+
+    #[test]
+    fn test_parse_invalid_syntax() {
+        let invalid_input = "[Produce] 1. Apple 4 pcs (Organic) {Nice";
+        let result = parse_shopping_list(invalid_input);
+        assert!(matches!(result, Err(ParseError::ParsingFailed(_))));
+    }
+
+    #[test]
+    fn test_parse_item_invalid_syntax() {
+        let invalid_item = "[Produce] 1. Apple";
+        let result = parse_shopping_list(invalid_item);
+        assert!(matches!(result, Err(ParseError::ParsingFailed(_))));
+    }
+
+    #[test]
+    fn test_parse_valid_input_with_missing_category() {
+        let input = "1. Apple 4 pcs (Organic) {Nice and fresh}";
+        let result = parse_shopping_list(input);
+        assert!(result.is_ok());
+    }
 }

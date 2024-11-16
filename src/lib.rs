@@ -1,10 +1,12 @@
 use anyhow::anyhow;
 use pest::Parser;
 use pest_derive::Parser;
+use thiserror::Error;
 
 #[derive(Parser)]
 #[grammar = "grammar.pest"]
 pub struct Grammar;
+
 /// Represents an item in the shopping list.
 pub struct ShoppingItem {
     pub index: usize,
@@ -20,6 +22,20 @@ pub struct ShoppingCategory {
     pub items: Vec<ShoppingItem>,
 }
 
+/// Describes possible errors that can occur during shopping list parsing.
+#[derive(Error, Debug)]
+pub enum ParseError {
+    /// General error indicating that the input is empty.
+    #[error("input is empty")]
+    EmptyInput,
+    /// Error indicating parsing failure with additional context.
+    #[error("Failed to parse shopping list: {0}")]
+    ParsingFailed(String),
+    /// Error indicating that parsing of an item failed.
+    #[error("Failed to parse item: {0}")]
+    ItemParsingFailed(String),
+}
+
 /// Parses a shopping list from a given string input.
 ///
 /// # Arguments
@@ -29,25 +45,25 @@ pub struct ShoppingCategory {
 /// # Returns
 ///
 /// * `Ok(Vec<ShoppingCategory>)` - A vector of `ShoppingCategory` if parsing is successful.
-/// * `Err(anyhow::Error)` - An error if the input is empty or parsing fails.
+/// * `Err(ParseError)` - An error if the input is empty or parsing fails.
 ///
 /// # Errors
 ///
 /// This function will return an error if:
 /// - The input is empty.
 /// - The input cannot be parsed according to the shopping list grammar.
-pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingCategory>> {
+pub fn parse_shopping_list(input: &str) -> Result<Vec<ShoppingCategory>, ParseError> {
     if input.trim().is_empty() {
-        return Err(anyhow!("input is empty"));
+        return Err(ParseError::EmptyInput);
     }
 
     let mut categories = Vec::new();
     let mut current_category = None;
     let mut items = Vec::new();
 
-    let pairs = Grammar::parse(Rule::shopping_list, input).map_err(|e| {
-        anyhow!("Failed to parse shopping list: {}", e)
-    })?;
+    let pairs = Grammar::parse(Rule::shopping_list, input)
+        .map_err(|e| ParseError::ParsingFailed(e.to_string()))?;
+
     for pair in pairs {
         if pair.as_rule() == Rule::shopping_list {
             for inner_pair in pair.into_inner() {
@@ -62,7 +78,8 @@ pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingCategory>>
                         });
                     }
                     Rule::item => {
-                        let item = parse_item(inner_pair)?;
+                        let item = parse_item(inner_pair)
+                            .map_err(|e| ParseError::ItemParsingFailed(e.to_string()))?;
                         if let Some(ref mut category) = current_category {
                             category.items.push(item);
                         } else {
@@ -81,6 +98,7 @@ pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingCategory>>
 
     Ok(categories)
 }
+
 /// Parses an individual item from a given `pest::iterators::Pair`.
 ///
 /// # Arguments
@@ -91,7 +109,6 @@ pub fn parse_shopping_list(input: &str) -> anyhow::Result<Vec<ShoppingCategory>>
 ///
 /// * `Ok(ShoppingItem)` - A `ShoppingItem` if parsing is successful.
 /// * `Err(anyhow::Error)` - An error if parsing fails.
-///
 fn parse_item(inner_pair: pest::iterators::Pair<Rule>) -> anyhow::Result<ShoppingItem> {
     let mut item = ShoppingItem {
         index: 0,
@@ -101,16 +118,24 @@ fn parse_item(inner_pair: pest::iterators::Pair<Rule>) -> anyhow::Result<Shoppin
         brand: None,
         description: None,
     };
+
     for element in inner_pair.into_inner() {
         match element.as_rule() {
-            Rule::index => item.index = element.as_str().parse()?,
+            Rule::index => item.index = element.as_str().parse().map_err(|e| anyhow!("{e}"))?,
             Rule::name => item.name = element.as_str().to_string(),
-            Rule::quantity => item.quantity = element.as_str().trim().parse()?,
+            Rule::quantity => {
+                item.quantity = element
+                    .as_str()
+                    .trim()
+                    .parse()
+                    .map_err(|e| anyhow!("{e}"))?
+            }
             Rule::unit => item.unit = element.as_str().to_string(),
             Rule::brand => item.brand = Some(element.as_str().to_string()),
             Rule::description => item.description = Some(element.as_str().to_string()),
             _ => unreachable!(),
         }
     }
+
     Ok(item)
 }
